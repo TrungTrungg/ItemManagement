@@ -1,0 +1,30 @@
+.content {
+    & .panel-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        row-gap: 2rem;
+        & .search-filter {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            & .status-filter {
+                margin: 2rem 0;
+            }
+            & .search {
+                margin: 2rem 0;
+
+                & a {
+                    margin: 0;
+                }
+            }
+        }
+
+        & .action {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+}

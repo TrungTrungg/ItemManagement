@@ -1,0 +1,24 @@
+.tool-item {
+    line-height: 4rem;
+    & a {
+        padding: 2rem;
+    }
+    &:hover {
+        background-color: #f4eeee;
+    }
+}
+.divider {
+    height: 0.1rem;
+    margin-bottom: 1rem;
+    background-color: black;
+}
+.sidebar-item {
+    line-height: 4rem;
+    border-bottom: thin solid #e7e7e7;
+    & a {
+        margin-left: 1rem;
+    }
+    &:hover a {
+        color: #2041ff;
+    }
+}

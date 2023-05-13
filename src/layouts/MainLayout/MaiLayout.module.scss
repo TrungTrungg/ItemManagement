@@ -1,0 +1,21 @@
+.wrapper {
+    top: 0;
+    left: 0;
+    width: 100%;
+    & .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 5rem;
+        background-color: #f8f8f8;
+        border-bottom: thin solid #e7e7e7;
+    }
+    & .page-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+        grid-column-gap: 3rem;
+        justify-items: stretch;
+        align-items: stretch;
+        margin-right: 3rem;
+    }
+}

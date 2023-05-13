@@ -1,0 +1,62 @@
+.rounded {
+    margin: 0.3rem;
+    border: 0.1rem solid #ccc;
+}
+.primary {
+    color: #f9fcff;
+    background-color: #0d6efd;
+    border-color: transparent;
+}
+.success {
+    color: #f9fcff;
+    background-color: #198754;
+    border-color: transparent;
+}
+.info {
+    color: #f9fcff;
+    background-color: #0dcaf0;
+    border-color: transparent;
+}
+.warning {
+    color: #f9fcff;
+    background-color: #ffc107;
+    border-color: transparent;
+}
+.danger {
+    color: #f9fcff;
+    background-color: #dc3545;
+    border-color: transparent;
+}
+.secondary {
+    color: #f9fcff;
+    background-color: #6c757d;
+    border-color: transparent;
+}
+.dark {
+    color: #f9fcff;
+    background-color: #212529;
+    border-color: transparent;
+}
+.light {
+    color: #f9fcff;
+    background-color: #f8f9fa;
+    border-color: transparent;
+}
+.sm {
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    border-radius: 0.3rem;
+}
+.md {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.4rem;
+}
+.lg {
+    padding: 1.2rem 2rem;
+    font-size: 1.6rem;
+    border-radius: 0.5rem;
+}
+.disable {
+    opacity: 0.8;
+}

@@ -1,0 +1,23 @@
+@use 'sass:math';
+
+.list-items {
+    border-collapse: collapse;
+
+    width: 100%;
+    & thead {
+        font-weight: bold;
+        & th {
+            border-bottom: 0.2rem solid #ddd;
+        }
+    }
+    & tbody {
+        text-align: center;
+        & tr {
+            padding: 0.8rem;
+            border-bottom: 0.1rem solid #ddd;
+            &:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+        }
+    }
+}
