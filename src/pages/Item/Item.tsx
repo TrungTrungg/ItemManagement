@@ -10,19 +10,21 @@ import { Panel, PanelHeading, PanelBody } from '../../components/Panel';
 import Button from '../../components/Button';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
-import BulkAction from '../../components/BulkAction';
+import BulkAction from '../../layouts/components/BulkAction';
 import StatusFilter from '../../layouts/components/StatusFilter';
 import ListItems from '../../layouts/components/ListItems';
+import Search from '../../layouts/components/Search';
+import { Statistics, PageInfo, Pagination } from '../../layouts/components/Pagination';
 
 const cx = classNames.bind(styles);
 
 const Item = () => {
     const optionsAction = [
         { value: '', name: 'Bulk Action' },
-        { value: 'adm/item/change-status/active', name: 'Active' },
-        { value: 'adm/item/change-status/inactive', name: 'Inactive' },
-        { value: 'adm/item/save-ordering', name: 'Change Ordering' },
-        { value: 'adm/item/delete', name: 'Delete' },
+        { value: 'adm/api/item/change-status/active', name: 'Active' },
+        { value: 'adm/api/item/change-status/inactive', name: 'Inactive' },
+        { value: 'adm/api/item/save-ordering', name: 'Change Ordering' },
+        { value: 'adm/api/item/delete', name: 'Delete' },
     ];
     const tableHeading = [
         {
@@ -51,15 +53,7 @@ const Item = () => {
                                     <StatusFilter />
                                 </div>
                                 <div className={cx('search')}>
-                                    <Form action="" method="GET">
-                                        <Input type="text" name="search" textArea rounded placeholder="Search for..." />
-                                        <Button to="/" color="primary" size="md">
-                                            Search
-                                        </Button>
-                                        <Button to="/" color="success" size="md">
-                                            Clear
-                                        </Button>
-                                    </Form>
+                                    <Search />
                                 </div>
                             </div>
                         </PanelBody>
@@ -72,9 +66,6 @@ const Item = () => {
                             <div className={cx('action')}>
                                 <div className={cx('bulk-action')}>
                                     <BulkAction name="action" options={optionsAction} className="options" rounded />
-                                    <Button color="primary" size="md" rounded disable>
-                                        Apply
-                                    </Button>
                                 </div>
                                 <div className={cx('add-action')}>
                                     <Button to="/adm/form" color="warning" size="md" rounded>
@@ -84,6 +75,28 @@ const Item = () => {
                             </div>
                             <div className={cx('table-list-items')}>
                                 <ListItems headingData={tableHeading} />
+                            </div>
+                        </PanelBody>
+                    }
+                ></Panel>
+                <Panel
+                    headingChildren={
+                        <PanelHeading>
+                            Pagination{' '}
+                            <div className={cx('item-right')}>
+                                <Statistics />
+                            </div>
+                        </PanelHeading>
+                    }
+                    bodyChildren={
+                        <PanelBody>
+                            <div className={cx('pagination-content')}>
+                                <div className={cx('page-info')}>
+                                    <PageInfo />
+                                </div>
+                                <div className={cx('page-number')}>
+                                    <Pagination />
+                                </div>
                             </div>
                         </PanelBody>
                     }

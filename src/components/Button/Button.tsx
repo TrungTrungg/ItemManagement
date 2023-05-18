@@ -12,10 +12,9 @@ interface Props {
     color?: 'primary' | 'success' | 'info' | 'warning' | 'danger' | 'default' | string;
     size?: 'sm' | 'lg' | 'md';
     rounded?: Object;
-    disable?: Object;
     isButton?: boolean;
     className?: any;
-    children?: ReactNode;
+    children?: any;
 }
 type ButtonProps = Props & Record<string, unknown>;
 
@@ -25,7 +24,6 @@ const Button = ({
     color,
     size,
     rounded,
-    disable,
     isButton = true,
     children,
     className,
@@ -43,7 +41,7 @@ const Button = ({
         Component = 'a';
     } else if (!isButton) Component = 'span';
 
-    const classes = cx({ [className]: className, disable, rounded }, color, size);
+    const classes = cx({ [className]: className, rounded }, color, size);
 
     return (
         <Component className={classes} {...props}>

@@ -22,3 +22,11 @@
         color: #2041ff;
     }
 }
+.list-flex {
+    display: flex;
+    flex-direction: row;
+    & a {
+        margin: 0;
+        border-radius: 0;
+    }
+}

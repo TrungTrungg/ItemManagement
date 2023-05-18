@@ -26,5 +26,16 @@
             justify-content: space-between;
             align-items: center;
         }
+        & .item-right {
+            & span {
+                margin-left: 1rem;
+            }
+        }
+        & .pagination-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
     }
 }

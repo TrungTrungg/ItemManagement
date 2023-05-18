@@ -16,7 +16,7 @@ const Sidebar = () => {
         {
             className: 'sidebar-item',
             comp: (
-                <Button to="adm">
+                <Button to="/adm">
                     <FontAwesomeIcon icon={faDashboard} className="fa-fw" />
                     Dashboard
                 </Button>
@@ -25,7 +25,7 @@ const Sidebar = () => {
         {
             className: 'sidebar-item',
             comp: (
-                <Button to="adm/item">
+                <Button to="/">
                     <FontAwesomeIcon icon={faDashboard} className="fa-fw" />
                     CRUD
                 </Button>

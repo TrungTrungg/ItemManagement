@@ -1,52 +1,72 @@
 import { ReactNode, createContext, useEffect, useState, useMemo } from 'react';
-import httpRequest from '../layouts/ulties/httpRequest';
+import httpRequest from '../ulties/httpRequest';
+import { IItems, IPagination, ISttFilter } from '../types/itemType';
 
-interface IPage {
-    currPage?: number;
-    itemsPerPage?: number;
-    pageRange?: number;
-    totalItem?: number;
-}
-
-interface IItem {
-    id: string;
-    name: string;
-    status: string;
-    ordering: number;
-}
-interface IStt {
-    name: string;
-    count: number;
-    style: string;
-}
 interface ListItemProps {
     currStatus?: string;
-    items?: IItem[];
+    items?: IItems[];
     keyword?: string;
-    pagination?: IPage;
-    sttFilter?: IStt[];
+    pagination?: IPagination;
+    sttFilter?: ISttFilter[];
 }
 
-export const ItemContext = createContext<any>('default');
+export const ItemContext = createContext<any>(undefined);
 
 const ItemProvider = ({ children }: { children: ReactNode }) => {
     const [listItems, setListItems] = useState<ListItemProps>({});
+    const [isChange, setIsChange] = useState<boolean>(false);
+    const [apiEndpoint, setApiEndpoint] = useState<string>('adm/api/item');
+    const [apiParam, setApiParam] = useState<Object>({});
+    const [data, setData] = useState<Object>({});
+
     const { currStatus, items, keyword, pagination, sttFilter } = listItems;
+
+    const updateStatus = () => {
+        setIsChange(!isChange);
+    };
+
+    const updateApiEndpoint = (newEndpoint: string) => {
+        setApiEndpoint(newEndpoint);
+    };
+
+    const updateApiParam = (newParam: string | number) => {
+        setApiParam(newParam);
+    };
+
     const getListItems = async () => {
         try {
-            const res = await httpRequest.get('adm/api/item', {});
+            const res = await httpRequest.get(apiEndpoint, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                params: { ...apiParam },
+            });
+
             return setListItems(res.data);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     };
 
     useEffect(() => {
         getListItems();
-    }, []);
+    }, [apiEndpoint, apiParam, isChange]);
 
     return (
-        <ItemContext.Provider value={{ currStatus, items, keyword, pagination, sttFilter }}>
+        <ItemContext.Provider
+            value={{
+                currStatus,
+                items,
+                keyword,
+                pagination,
+                sttFilter,
+                data,
+                setData,
+                updateApiEndpoint,
+                updateApiParam,
+                updateStatus,
+            }}
+        >
             {children}
         </ItemContext.Provider>
     );

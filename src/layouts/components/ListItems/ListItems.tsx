@@ -1,40 +1,99 @@
-import { ReactNode, useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, ChangeEvent, useRef } from 'react';
 import classNames from 'classnames/bind';
 
-import styles from './ListItems.module.scss';
+import httpRequest from '../../../ulties/httpRequest';
+
+import { ItemContext } from '../../../Context/ItemProvider';
+
+import { HeadingProps, ItemContextProps, ListItemProps } from './types';
+import { IItems } from '../../../types/itemType';
+
+import styles from './listItems.module.scss';
+
 import { Table, TableHeading, TableBody } from '../../../components/Table';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
-import { fetchData } from '../../../service/getData';
-import { ItemContext } from '../../../Context/ItemProvider';
-
 const cx = classNames.bind(styles);
 
-interface IItem {
-    id: string;
-    name: string;
-    status: string;
-    ordering: number;
-}
+const listItems = ({ headingData }: ListItemProps) => {
+    const { items, updateStatus, setData, data } = useContext<ItemContextProps>(ItemContext);
 
-interface HeadingProps {
-    id: string;
-    name: string;
-    status: string;
-    ordering: string;
-    action: string;
-}
+    const [listItems, setListItems] = useState<IItems[] | null>(null);
+    const [changeStatus, setChangeStatus] = useState<IItems | null>(null);
+    const [isChecked, setIsChecked] = useState<boolean>(false);
+    const [listCheckbox, setListCheckbox] = useState<string[]>([]);
+    const [listOrdering, setlistOrdering] = useState<(string | number)[]>([]);
 
-interface Props {
-    children?: ReactNode;
-    headingData: HeadingProps[];
-}
+    const inputRef = useRef();
 
-type ListItemProps = Props & Record<string, unknown>;
+    // handle check/uncheck all checkbox
+    const handleChange = () => {
+        setIsChecked(!isChecked);
+    };
 
-const ListItems = ({ headingData }: ListItemProps) => {
-    const { items } = useContext(ItemContext);
+    useEffect(() => {
+        const allCheckboxValue: string[] = [];
+        if (listItems && isChecked === true)
+            listItems.forEach((item, i) => {
+                allCheckboxValue.push(item._id);
+            });
+        setListCheckbox(allCheckboxValue);
+    }, [isChecked]);
+
+    // handle check/uncheck each checkbox
+    const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+        const { value, checked } = e.target;
+        const updatedListCheckbox = [...listCheckbox];
+
+        if (checked) {
+            updatedListCheckbox.push(value);
+        } else {
+            const index = updatedListCheckbox.indexOf(value);
+
+            if (index !== -1) {
+                updatedListCheckbox.splice(index, 1);
+            }
+        }
+        setListCheckbox(updatedListCheckbox);
+    };
+
+    // set data for api
+    useEffect(() => {
+        setData({ cid: listCheckbox });
+    }, [listCheckbox]);
+
+    // handle change each item status
+    const hanldeChangeStatus = async (id: string, status: string) => {
+        const URL = `adm/api/item/change-status/${id}/${status}`;
+        try {
+            const res = await httpRequest.get(URL);
+            setChangeStatus(res.data);
+        } catch (error) {}
+        updateStatus();
+    };
+
+    // handle change item ordering
+    const handleChangeOrdering = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+        const updateListOrdering = [...listOrdering];
+        if (listItems)
+            listItems.forEach((item, i) => {
+                if (listCheckbox.includes(item._id)) updateListOrdering.push(e.target.value);
+            });
+        setlistOrdering(updateListOrdering);
+    };
+
+    useEffect(() => {
+        console.log(listOrdering);
+    }, [listOrdering]);
+
+    // re-render when having  update
+    useEffect(() => {
+        if (items) {
+            setListItems(items);
+        }
+    }, [items, changeStatus]);
+
     return (
         <Table
             headingChildren={
@@ -42,8 +101,8 @@ const ListItems = ({ headingData }: ListItemProps) => {
                     {headingData.map((data, i) => {
                         return (
                             <tr key={i}>
-                                <th>
-                                    <Input type="checkbox" value="" />
+                                <th className={cx('col-checkbox')}>
+                                    <Input type="checkbox" value="" onChange={handleChange} checked={isChecked} />
                                 </th>
                                 <th>{data.id}</th>
                                 <th>{data.name}</th>
@@ -57,26 +116,47 @@ const ListItems = ({ headingData }: ListItemProps) => {
             }
             bodyChildren={
                 <TableBody>
-                    {!items ? (
+                    {!listItems ? (
                         <tr>
                             <td>Loading...</td>
                         </tr>
                     ) : (
-                        items.map((item: IItem, i: number) => {
+                        listItems.map((item: IItems, i: number) => {
+                            if (changeStatus?._id === item._id) item.status = changeStatus.status;
+                            let buttColor = item.status === 'active' ? 'success' : 'danger';
                             return (
                                 <tr key={i}>
                                     <td>
-                                        <Input type="checkbox" value="" />
+                                        <Input
+                                            type="checkbox"
+                                            name={i}
+                                            value={item._id}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleCheckboxChange(e, i)}
+                                            checked={listCheckbox.includes(item._id)}
+                                        />
                                     </td>
                                     <td>{++i}</td>
                                     <td className={cx('col-name')}>{item.name}</td>
                                     <td className={cx('col-status')}>
-                                        <Button color="success" size="sm" rounded>
+                                        <Button
+                                            color={buttColor}
+                                            size="sm"
+                                            rounded
+                                            onClick={() => hanldeChangeStatus(item._id, item.status)}
+                                        >
                                             {item.status}
                                         </Button>
                                     </td>
                                     <td>
-                                        <Input type="number" value={item.ordering} rounded center bold />
+                                        <Input
+                                            type="number"
+                                            value={item.ordering}
+                                            ref={inputRef}
+                                            rounded
+                                            center
+                                            bold
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChangeOrdering(e, i)}
+                                        />
                                     </td>
                                     <td>
                                         <Button color="warning" size="md" rounded>
@@ -96,4 +176,4 @@ const ListItems = ({ headingData }: ListItemProps) => {
     );
 };
 
-export default ListItems;
+export default listItems;

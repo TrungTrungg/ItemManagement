@@ -6,7 +6,7 @@ import styles from './List.module.scss';
 const cx = clasNames.bind(styles);
 
 type ItemProps = {
-    className: any;
+    className?: any;
     comp?: any;
 };
 
@@ -23,8 +23,9 @@ const List = ({ className, items, children, ...passProps }: ListProps) => {
         ...passProps,
     };
     const classes = cx({ [className]: className });
+
     return (
-        <ul className={className} {...props}>
+        <ul className={classes} {...props}>
             {items.map((item, i) => {
                 return (
                     <li key={i} className={cx(item.className)}>

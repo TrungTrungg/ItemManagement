@@ -1,0 +1,15 @@
+.text {
+    display: block;
+    & span {
+        font-weight: bold;
+        color: rgb(43, 0, 198);
+    }
+}
+.list-flex {
+    display: flex;
+    flex-direction: row;
+    & a {
+        margin: 0;
+        border-radius: 0;
+    }
+}
