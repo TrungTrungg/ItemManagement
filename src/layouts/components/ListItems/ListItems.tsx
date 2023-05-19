@@ -24,8 +24,9 @@ const listItems = ({ headingData }: ListItemProps) => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
     const [listCheckbox, setListCheckbox] = useState<string[]>([]);
     const [listOrdering, setlistOrdering] = useState<(string | number)[]>([]);
+    const [ordering, setOrdering] = useState<number>();
 
-    const inputRef = useRef();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // handle check/uncheck all checkbox
     const handleChange = () => {
